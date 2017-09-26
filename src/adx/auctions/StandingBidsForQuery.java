@@ -15,7 +15,7 @@ import adx.util.Pair;
  * 
  * @author Enrique Areyan Viqueira
  */
-public class StandingBids {
+public class StandingBidsForQuery {
 
   /**
    * List of pair (agent name, bid).
@@ -32,7 +32,7 @@ public class StandingBids {
    * 
    * @param bids
    */
-  public StandingBids(List<Pair<String, BidEntry>> bids, double reserve) {
+  public StandingBidsForQuery(List<Pair<String, BidEntry>> bids, double reserve) {
     this.standingBids = new ArrayList<Pair<String, BidEntry>>(bids);
     Collections.sort(this.standingBids, AdAuctions.bidComparator);
     this.reserve = reserve;
@@ -63,7 +63,7 @@ public class StandingBids {
     if (this.standingBids.size() == 0) {
       // If there are no more bids, return null.
       return null;
-    } else if (this.standingBids.get(0).getElement2().getBid() < reserve) {
+    } else if (this.standingBids.get(0).getElement2().getBid() < this.reserve) {
       // If the highest bid does not meet reserve, return null.
       return null;
     } else if (this.standingBids.size() == 1) {
