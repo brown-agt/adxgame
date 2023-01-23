@@ -46,6 +46,9 @@ public class Parameters {
 
   // How many simulated days.
   public static int TOTAL_SIMULATED_DAYS;
+  
+  // Reserve Price For Auctions.
+  public static double RESERVE;
 
   // Campaigns can last several days. This list specifies the allowable number of days.
   public static ImmutableList<Integer> CAMPAIGN_DURATIONS;
@@ -152,9 +155,26 @@ public class Parameters {
     return Parameters.CAMPAIGN_DURATIONS;
   }
   
+  /**
+   * Getter.
+   * 
+   * @return
+   * @throws AdXException
+   */
   public static EffectiveReach get_EFFECTIVE_REACH_TYPE() throws AdXException {
 	  Parameters.safeguard();
 	  return Parameters.EFFECTIVE_REACH_TYPE;
+  }
+  
+  /**
+   * Getter.
+   * 
+   * @return
+   * @throws AdXException
+   */
+  public static double get_RESERVE() throws AdXException {
+	  Parameters.safeguard();
+	  return Parameters.RESERVE;
   }
 
   /**
@@ -195,6 +215,7 @@ public class Parameters {
 
       // Game-specific parameters.
       Parameters.TOTAL_SIMULATED_DAYS = Integer.parseInt(ini.get(type_of_game).get("TOTAL_SIMULATED_DAYS"));
+      Parameters.RESERVE = Double.parseDouble(ini.get("PARAMETERS").get("RESERVE"));
       Parameters.EFFECTIVE_REACH_TYPE = EffectiveReach.ofString(ini.get(type_of_game).get("EFFECTIVE_REACH_TYPE"));
 
       // Compute an immutable list of integers corresponding to the allowable duration of campaigns.
