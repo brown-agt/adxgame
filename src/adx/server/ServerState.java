@@ -363,6 +363,19 @@ public class ServerState {
     }
     Logging.log("[-] Done running campaign auction for day " + this.currentDay);
   }
+  
+  
+  public void runCampaignEndowments() throws AdXException {
+	  // For each agent we give one endowment
+	  for (String agent : agentsNames) {
+		  Campaign endowment = Sampling.sampleEndowedCampaign(this.currentDay);
+		  // If endowed campaign ends after last day we do not give them out 
+		  if (!(endowment.getEndDay() > Parameters.get_TOTAL_SIMULATED_DAYS())) {
+			  endowment.setBudget(endowment.getReach() * Parameters.get_ENDOWMENT_BUDGET());
+			  this.registerCampaign(endowment, agent);
+		  }
+	  }
+  }
 
   /**
    * Runs all the ad auctions.
@@ -376,12 +389,12 @@ public class ServerState {
   }
 
   /**
-   * Wrapper to run auctions with no reserve and default number of impressions.
+   * Wrapper to run auctions with reserve.
    * 
    * @throws AdXException
    */
   public void runAdAuctions() throws AdXException {
-    this.runAdAuctions(0.0, Parameters.POPULATION_SIZE);
+    this.runAdAuctions(Parameters.RESERVE, Parameters.POPULATION_SIZE);
   }
 
   /**

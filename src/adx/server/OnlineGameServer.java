@@ -67,6 +67,9 @@ public class OnlineGameServer extends OnlineGameServerAbstract {
               synchronized (this) {
                 try {
                   this.serverState.runAdAuctions();
+                  if (Parameters.get_ENDOWMENTS()) {
+					this.serverState.runCampaignEndowments();
+				  }
                   this.serverState.runCampaignAuctions();
                   this.serverState.updateDailyStatistics(Parameters.EFFECTIVE_REACH_TYPE);
                 } catch (AdXException e) {

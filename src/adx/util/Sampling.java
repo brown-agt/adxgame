@@ -191,6 +191,20 @@ public class Sampling {
     // Return a new campaign object.
     return new Campaign(Sampling.getUniqueCampaignId(), day + 1, day + randomDuration, randomMarketSegment, reach);
   }
+  
+  public static Campaign sampleEndowedCampaign(int day) throws AdXException {
+	// Get the random market segment and its expected size.
+    Pair<MarketSegment, Integer> randomMarketSegmentPair = Sampling.sampleMarketSegment();
+    MarketSegment randomMarketSegment = randomMarketSegmentPair.getElement1();
+    int sizeOfRandomSegment = randomMarketSegmentPair.getElement2();
+    // Determine the random campaign reach level factor C_RL.
+    double randomReachFactor = Sampling.campaignReachFactor[Sampling.random.nextInt(Sampling.campaignReachFactor.length)];
+    // Compute the reach of the campaign 
+    int reach = (int) Math.floor(randomReachFactor * sizeOfRandomSegment);
+    // Return a new campaign object.
+    return new Campaign(Sampling.getUniqueCampaignId(), day + 1, day + 1, randomMarketSegment, reach);
+	  
+  }
 
   /**
    * Compute a random market segment from the available list in MarketSegment.proportionsList.

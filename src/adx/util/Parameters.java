@@ -32,6 +32,12 @@ public class Parameters {
   // Number of real-time seconds for a simulated day.
   private static int SECONDS_DURATION_DAY;
 
+  // Whether or not there will be endowed campaigns
+  private static boolean ENDOWMENTS;
+  
+  // The budgets of the endowed campaigns
+  private static double ENDOWMENT_BUDGET;
+  
   // In case campaigns are auctioned, how many campaigns to auction.
   private static int NUMBER_AUCTION_CAMPAINGS;
 
@@ -49,6 +55,7 @@ public class Parameters {
   
   // Reserve Price For Auctions.
   public static double RESERVE;
+  
 
   // Campaigns can last several days. This list specifies the allowable number of days.
   public static ImmutableList<Integer> CAMPAIGN_DURATIONS;
@@ -88,7 +95,29 @@ public class Parameters {
     Parameters.safeguard();
     return Parameters.SECONDS_DURATION_DAY;
   }
-
+  
+  /**
+   * Getter.
+   * 
+   * @return
+   * @throws AdXException
+   */
+  public static boolean get_ENDOWMENTS() throws AdXException {
+    Parameters.safeguard();
+    return Parameters.ENDOWMENTS;
+  }
+  
+  /**
+   * Getter.
+   * 
+   * @return
+   * @throws AdXException
+   */
+  public static double get_ENDOWMENT_BUDGET() throws AdXException {
+    Parameters.safeguard();
+    return Parameters.ENDOWMENT_BUDGET;
+  }
+  
   /**
    * Getter.
    * 
@@ -155,6 +184,7 @@ public class Parameters {
     return Parameters.CAMPAIGN_DURATIONS;
   }
   
+  
   /**
    * Getter.
    * 
@@ -212,10 +242,13 @@ public class Parameters {
       Parameters.QUALITY_SCORE_LEARNING_RATE = Double.parseDouble(ini.get("PARAMETERS").get("QUALITY_SCORE_LEARNING_RATE"));
       Parameters.TOTAL_SIMULATED_GAMES = Integer.parseInt(ini.get("PARAMETERS").get("TOTAL_SIMULATED_GAMES"));
       Parameters.POPULATION_SIZE = Integer.parseInt(ini.get("PARAMETERS").get("POPULATION_SIZE"));
+      Parameters.RESERVE = Double.parseDouble(ini.get("PARAMETERS").get("RESERVE"));
+      Parameters.ENDOWMENTS = Boolean.parseBoolean(ini.get("PARAMETERS").get("ENDOWMENTS"));
+      Parameters.ENDOWMENT_BUDGET = Double.parseDouble(ini.get("PARAMETERS").get("ENDOWMENT_BUDGET"));
 
       // Game-specific parameters.
       Parameters.TOTAL_SIMULATED_DAYS = Integer.parseInt(ini.get(type_of_game).get("TOTAL_SIMULATED_DAYS"));
-      Parameters.RESERVE = Double.parseDouble(ini.get("PARAMETERS").get("RESERVE"));
+      Parameters.TOTAL_SIMULATED_DAYS = Integer.parseInt(ini.get(type_of_game).get("TOTAL_SIMULATED_DAYS"));
       Parameters.EFFECTIVE_REACH_TYPE = EffectiveReach.ofString(ini.get(type_of_game).get("EFFECTIVE_REACH_TYPE"));
 
       // Compute an immutable list of integers corresponding to the allowable duration of campaigns.
