@@ -36,9 +36,9 @@ public class AdAuctions {
 	    for (Entry<String, BidBundle> agentBid : bidBundles.entrySet()) {
 	      for (BidEntry bidEntry : agentBid.getValue().getBidEntries()) {
 	    	  Campaign c = statistics.getStatisticsCampaign().getCampaign(bidEntry.getCampaignId());
-	    	  boolean marketSegmentValidForCampaign = MarketSegment.marketSegmentSubset(c.getMarketSegment(), bidEntry.getQuery().getMarketSegment());
+	    	//  boolean marketSegmentValidForCampaign = MarketSegment.marketSegmentSubset(c.getMarketSegment(), bidEntry.getQuery().getMarketSegment());
 	        // Check if the query matches.
-	        if (bidEntry.getQuery().matchesQuery(query) && Double.isFinite(bidEntry.getBid()) && marketSegmentValidForCampaign) {
+	        if (bidEntry.getQuery().matchesQuery(query) && Double.isFinite(bidEntry.getBid())) {
 	          bids.add(new Pair<String, BidEntry>(agentBid.getKey(), bidEntry));
 	        }
 	      }
@@ -163,8 +163,11 @@ public class AdAuctions {
           // Logging.log("DELETED BID FROM QUERY: " + query);
         } else {
           // In case the campaign still has budget (both query and daily), allocate the user to this campaign.
+          // MarketSegment campaignSeg = statistics.getStatisticsCampaign().getCampaign(winnerBidEntry.getCampaignId()).getMarketSegment();
+          // MarketSegment impressionSeg = query.getMarketSegment(); 
+          // Allocation always updates costs, but updates reach only for matching impression seg
           statistics.getStatisticsAds().addStatistic(day, winnerName, winnerBidEntry.getCampaignId(), query, 1, winCost);
-          statistics.getStatisticsAds().addReserveAllocation(day, bidsForCurrentQuery.winnerPayedReserve());
+          statistics.getStatisticsAds().addReserveAllocation(day, bidsForCurrentQuery.winnerPayedReserve());	
           break;
         }
       }
