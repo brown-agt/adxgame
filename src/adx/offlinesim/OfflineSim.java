@@ -9,7 +9,9 @@ import adx.agent.OfflineAgent;
 import adx.exceptions.AdXException;
 import adx.server.OfflineGameServer;
 import adx.server.OfflineGameServerAbstract;
-import adx.variants.onedaygame.SimpleOneDayAgent;
+import adx.variants.ndaysgame.Tier1NDaysNCampaignsAgent;
+import adx.variants.ndaysgame.SimpleMinBidder;
+import adx.variants.ndaysgame.SimpleNDayAgent;
 
 public class OfflineSim {
 	private OfflineGameServerAbstract server;
@@ -34,10 +36,16 @@ public class OfflineSim {
 		OfflineGameServer.initParams(args);
 		OfflineGameServerAbstract server = new OfflineGameServer();
 		Collection<AgentLogic> agents = Arrays.asList(
-				new SimpleOneDayAgent(),
-				new SimpleOneDayAgent(),
-				new SimpleOneDayAgent(),
-				new SimpleOneDayAgent());
+			new SimpleMinBidder(0.),
+			new SimpleMinBidder(0.),
+			new SimpleMinBidder(0.),
+			new SimpleNDayAgent(),
+			new SimpleNDayAgent(),
+			new SimpleNDayAgent(),
+			new SimpleNDayAgent(),
+			new SimpleNDayAgent(),
+			new SimpleNDayAgent(),
+			new SimpleNDayAgent());;
 		new OfflineSim(server, agents).run();
 	}
 }

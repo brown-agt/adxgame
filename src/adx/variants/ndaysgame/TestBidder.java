@@ -18,28 +18,25 @@ import adx.structures.Campaign;
 import adx.structures.SimpleBidEntry;
 import adx.util.AgentStartupUtil;
 import adx.util.Logging;
+import adx.structures.MarketSegment;
 
-public class SimpleMinBidder extends NDaysNCampaignsAgent {
-	
-	// The probability of min bidding
-	Double probability;
-	
+public class TestBidder extends NDaysNCampaignsAgent {
+
 	/**
 	 * Constructor.
 	 * 
 	 * @param host
 	 * @param port
 	 */
-	public SimpleMinBidder(Double p) {
+	public TestBidder() {
 		super();
-		this.probability = p;
 	}
-
+	
 	@Override
 	protected Set<NDaysAdBidBundle> getAdBids() throws AdXException {
 		// Log for which day we want to compute the bid bundle.
 		Set<NDaysAdBidBundle> set = new HashSet<>();
-
+		int mode = 1;
 		for (Campaign c : this.getActiveCampaigns()) {
 			double budgetLeft = c.getBudget() - this.getCumulativeCost(c);
 			double reachLeft = c.getReach() - this.getCumulativeReach(c);
@@ -47,8 +44,12 @@ public class SimpleMinBidder extends NDaysNCampaignsAgent {
 			if (reachLeft <= 0) {
 				bidf = 0;
 			}
-			Set<SimpleBidEntry> bids = new HashSet<>();
 			SimpleBidEntry bid = new SimpleBidEntry(c.getMarketSegment(), bidf , budgetLeft);
+			Set<SimpleBidEntry> bids = new HashSet<>();
+			if (mode == 1) {
+				MarketSegment seg = adx.structures.MarketSegment.FEMALE_YOUNG;
+				bid = new SimpleBidEntry(seg, bidf , budgetLeft);
+			} 
 			bids.add(bid);
 			NDaysAdBidBundle bundle = new NDaysAdBidBundle(c.getId(), c.getBudget() - this.getCumulativeCost(c), bids);
 			set.add(bundle);

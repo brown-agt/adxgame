@@ -19,10 +19,7 @@ import adx.structures.SimpleBidEntry;
 import adx.util.AgentStartupUtil;
 import adx.util.Logging;
 
-public class SimpleMinBidder extends NDaysNCampaignsAgent {
-	
-	// The probability of min bidding
-	Double probability;
+public class Tier1Min extends NDaysNCampaignsAgent {
 	
 	/**
 	 * Constructor.
@@ -30,9 +27,8 @@ public class SimpleMinBidder extends NDaysNCampaignsAgent {
 	 * @param host
 	 * @param port
 	 */
-	public SimpleMinBidder(Double p) {
+	public Tier1Min() {
 		super();
-		this.probability = p;
 	}
 
 	@Override
@@ -41,19 +37,13 @@ public class SimpleMinBidder extends NDaysNCampaignsAgent {
 		Set<NDaysAdBidBundle> set = new HashSet<>();
 
 		for (Campaign c : this.getActiveCampaigns()) {
-			double budgetLeft = c.getBudget() - this.getCumulativeCost(c);
-			double reachLeft = c.getReach() - this.getCumulativeReach(c);
-			double bidf = c.getBudget()/c.getReach();
-			if (reachLeft <= 0) {
-				bidf = 0;
-			}
-			Set<SimpleBidEntry> bids = new HashSet<>();
-			SimpleBidEntry bid = new SimpleBidEntry(c.getMarketSegment(), bidf , budgetLeft);
-			bids.add(bid);
-			NDaysAdBidBundle bundle = new NDaysAdBidBundle(c.getId(), c.getBudget() - this.getCumulativeCost(c), bids);
+			SimpleBidEntry entry = new SimpleBidEntry(c.getMarketSegment(),
+					Math.max(0.1,  (c.getBudget() - this.getCumulativeCost(c)) / (c.getReach() - this.getCumulativeReach(c) + 0.0001)),
+					Math.max(1.0, c.getBudget() - this.getCumulativeCost(c)));
+			NDaysAdBidBundle bundle = new NDaysAdBidBundle(c.getId(), Math.max(1.0, c.getBudget() - this.getCumulativeCost(c)),
+					Sets.newHashSet(entry));
 			set.add(bundle);
 		}
-		
 		return set;
 	}
 
