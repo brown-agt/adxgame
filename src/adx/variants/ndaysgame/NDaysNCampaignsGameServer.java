@@ -64,6 +64,9 @@ public class NDaysNCampaignsGameServer extends OnlineGameServer {
                   this.serverState.runAdAuctions();
                   this.serverState.runCampaignAuctions();
                   this.serverState.updateDailyStatistics(EffectiveReach.SIGMOIDAL);
+					if (Parameters.get_ENDOWMENTS()) {
+						this.serverState.runCampaignEndowments();
+					}
                 } catch (AdXException e) {
                   Logging.log("[x] Error running some auction -> " + e.getMessage());
                 }
