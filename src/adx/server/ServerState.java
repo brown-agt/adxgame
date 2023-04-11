@@ -368,11 +368,16 @@ public class ServerState {
   public void runCampaignEndowments() throws AdXException {
 	  // For each agent we give one endowment
 	  for (String agent : agentsNames) {
-		  Campaign endowment = Sampling.sampleEndowedCampaign(this.currentDay);
-		  // If endowed campaign ends after last day we do not give them out 
-		  if (!(endowment.getEndDay() > Parameters.get_TOTAL_SIMULATED_DAYS())) {
-			  endowment.setBudget(endowment.getReach() * Parameters.get_ENDOWMENT_BUDGET());
-			  this.registerCampaign(endowment, agent);
+		  double qs = this.statistics.getQualityScore(this.currentDay, agent);
+		  double prob = Math.min(qs, 1.);
+		  // If an agents quality score >= 1 they get an endowment otherwise they get it with probability equal to their quality score
+		  if (Math.random() < prob) {
+			  Campaign endowment = Sampling.sampleEndowedCampaign(this.currentDay);
+			  // If endowed campaign ends after last day we do not give them out 
+			  if (!(endowment.getEndDay() > Parameters.get_TOTAL_SIMULATED_DAYS())) {
+				  endowment.setBudget(endowment.getReach() * Parameters.get_ENDOWMENT_BUDGET());
+				  this.registerCampaign(endowment, agent);
+			  }
 		  }
 	  }
   }
