@@ -188,17 +188,17 @@ public class StatisticsAds {
       Double currentCost = this.dailyStatistics.get(day, agent).get(campaignId, query).getElement2();
       this.dailyStatistics.get(day, agent).put(campaignId, query, new Pair<Integer, Double>(currentCount + winCount, currentCost + winCost));
     }
-
-    // Add daily summary.
-    if (!this.dailySummary.get(day, agent).containsKey(campaignId)) {
-      this.dailySummary.get(day, agent).put(campaignId, new Pair<Integer, Double>(winCount, winCost));
-    } else {
-      Pair<Integer, Double> total = this.dailySummary.get(day, agent).get(campaignId);
-      this.dailySummary.get(day, agent).put(campaignId, new Pair<Integer, Double>(total.getElement1() + winCount, total.getElement2() + winCost));
-    }
-
+    
     // Compute effective reach provided by the impressions of this query.
     int effectiveReach = this.computeEffectiveReach(campaignId, query, winCount);
+    
+    // Add daily summary.
+    if (!this.dailySummary.get(day, agent).containsKey(campaignId)) {
+      this.dailySummary.get(day, agent).put(campaignId, new Pair<Integer, Double>(effectiveReach, winCost));
+    } else {
+      Pair<Integer, Double> total = this.dailySummary.get(day, agent).get(campaignId);
+      this.dailySummary.get(day, agent).put(campaignId, new Pair<Integer, Double>(total.getElement1() + effectiveReach, total.getElement2() + winCost));
+    }
 
     // Add daily effective reach.
     if (!this.dailyEffectiveReach.get(day, agent).containsKey(campaignId)) {
